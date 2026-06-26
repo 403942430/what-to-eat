@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 interface NavItem {
   label: string;
   href: string;
-  icon: string;       // emoji 图标
+  icon: string;
 }
 
 const navItems: NavItem[] = [
@@ -20,7 +20,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-[#fffdf9] border-t border-amber-200
+    <nav className="fixed bottom-0 left-0 right-0 bg-stone-50 border-t border-stone-200
       flex justify-around items-center h-16 safe-area-bottom z-50">
       {navItems.map((item) => {
         const isActive =
@@ -32,7 +32,7 @@ export default function BottomNav() {
             key={item.href}
             href={item.href}
             className={`flex flex-col items-center gap-0.5 px-3 py-1
-              ${isActive ? 'text-orange-500' : 'text-gray-600'}`}
+              ${isActive ? 'text-orange-500' : 'text-stone-500'}`}
           >
             <span className="text-xl">{item.icon}</span>
             <span className="text-xs font-medium">{item.label}</span>

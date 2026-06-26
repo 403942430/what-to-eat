@@ -6,6 +6,8 @@ const withPWA = withSerwist({
   swDest: 'public/sw.js',
 });
 
-const nextConfig: NextConfig = withPWA({});
+const nextConfig: NextConfig = withPWA({
+  turbopack: {},
+});
 
 export default nextConfig;
