@@ -46,7 +46,7 @@ export default function ShopsPage() {
   }, [shops, showAll, activeAreaId, category]);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 px-4 pt-4">
+    <div className="min-h-screen  pb-20 px-4 pt-4">
       <div className="flex items-center justify-between mb-3">
         <h1 className="text-lg font-bold">🏪 店铺管理</h1>
         <Link href="/shops/add">

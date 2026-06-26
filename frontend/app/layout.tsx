@@ -32,7 +32,7 @@ export default function RootLayout({
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
       </head>
-      <body className="min-h-full bg-gray-50 text-gray-900">
+      <body className="min-h-full text-gray-800">
         <SWRegister />
         {children}
         <BottomNav />

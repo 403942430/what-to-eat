@@ -220,7 +220,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 px-4 pt-4">
+    <div className="min-h-screen  pb-20 px-4 pt-4">
       <h1 className="text-lg font-bold mb-4">⚙️ 设置</h1>
 
       {/* 一键初始化 */}
@@ -245,7 +245,7 @@ export default function SettingsPage() {
         <h2 className="font-bold mb-3">📍 配送区域</h2>
         <div className="space-y-2 mb-3">
           {areaList.map((a) => (
-            <div key={a.id} className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2">
+            <div key={a.id} className="flex items-center justify-between  rounded-xl px-3 py-2">
               <div>
                 <span className="font-medium text-sm">{a.name}</span>
                 <span className="text-xs text-gray-400 ml-2">{a.address}</span>

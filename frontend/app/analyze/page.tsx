@@ -30,7 +30,7 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 px-4 pt-4">
+    <div className="min-h-screen  pb-20 px-4 pt-4">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-lg font-bold">🔍 评论分析</h1>
         <NetworkBadge status={networkStatus} />
@@ -74,7 +74,7 @@ export default function AnalyzePage() {
               </summary>
               <div className="space-y-1 mt-2">
                 {result.indicators.map((ind, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-1.5">
+                  <div key={i} className="flex items-center gap-2  rounded-lg px-3 py-1.5">
                     <span className="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full">
                       {ind.type}
                     </span>

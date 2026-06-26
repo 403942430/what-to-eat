@@ -28,7 +28,7 @@ export default function ShopDetailPage() {
 
   if (!shop) {
     return (
-      <div className="min-h-screen bg-gray-50 px-4 pt-4 pb-20 flex items-center justify-center">
+      <div className="min-h-screen  px-4 pt-4 pb-20 flex items-center justify-center">
         <p className="text-gray-400">加载中...</p>
       </div>
     );
@@ -45,9 +45,9 @@ export default function ShopDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen  pb-20">
       {/* 头部 */}
-      <div className="bg-white px-4 pt-4 pb-6 border-b border-gray-100">
+      <div className=" px-4 pt-4 pb-6 border-b border-gray-100">
         <button onClick={() => router.back()} className="text-gray-400 text-sm mb-3">
           ← 返回
         </button>
@@ -94,7 +94,7 @@ export default function ShopDetailPage() {
                     className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-colors
                       ${score === opt.value
                         ? 'bg-orange-50 ring-2 ring-orange-400'
-                        : 'bg-gray-50 hover:bg-gray-100'}`}
+                        : ' hover:bg-gray-100'}`}
                   >
                     <span className="text-2xl">{opt.emoji}</span>
                     <span className="text-xs text-gray-500">{opt.label}</span>

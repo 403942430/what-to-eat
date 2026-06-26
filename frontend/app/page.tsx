@@ -75,7 +75,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-gray-50 pb-20">
+    <div className="min-h-screen  pb-20">
       {/* 顶部 */}
       <div className="px-4 pt-5 pb-3 flex items-center justify-between">
         <div>

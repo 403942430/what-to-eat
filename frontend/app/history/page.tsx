@@ -33,7 +33,7 @@ export default function HistoryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 px-4 pt-4">
+    <div className="min-h-screen  pb-20 px-4 pt-4">
       <h1 className="text-lg font-bold mb-4">📋 推荐历史</h1>
 
       {loading ? (
