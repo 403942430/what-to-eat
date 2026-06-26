@@ -1,16 +1,24 @@
-const CACHE_NAME = 'what-to-eat-v1';
-const urlsToCache = ['/', '/manifest.json'];
+// 缓存策略：首次访问时缓存所有资源，之后离线可用
+const CACHE_NAME = 'what-to-eat-v2';
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
-  );
   self.skipWaiting();
 });
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => response || fetch(event.request))
+    caches.match(event.request).then((cached) => {
+      // 缓存命中 → 直接返回
+      if (cached) return cached;
+      // 未命中 → 网络请求，成功则缓存
+      return fetch(event.request).then((response) => {
+        if (response.ok) {
+          const cloned = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
+        }
+        return response;
+      });
+    })
   );
 });
 
