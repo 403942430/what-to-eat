@@ -1,10 +1,10 @@
 """Pydantic 请求/响应模型"""
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import Optional
 
 class AnalyzeRequest(BaseModel):
-    text: str = Field(..., min_length=1, max_length=2000, description="评论文本")
-    user_token: str = Field("anonymous", max_length=64)
+    text: str
+    user_token: str = "anonymous"
 
 class Indicator(BaseModel):
     word: str
@@ -13,13 +13,13 @@ class Indicator(BaseModel):
 
 class AnalyzeResponse(BaseModel):
     is_fake: bool
-    confidence: float = Field(..., ge=0.0, le=1.0)
+    confidence: float
     indicators: list[Indicator] = []
 
 class SyncRequest(BaseModel):
-    token: str = Field(..., max_length=64)
-    since: Optional[str] = None  # ISO 8601
+    token: str
+    since: Optional[str] = None
 
 class BackupRequest(BaseModel):
-    token: str = Field(..., max_length=64)
+    token: str
     data_json: dict
