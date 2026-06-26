@@ -1,0 +1,6 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy==2.0.36
+jieba==0.42.1
+scikit-learn==1.5.2
+numpy==2.2.1

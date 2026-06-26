@@ -1,0 +1,39 @@
+{
+  "areas": [
+    { "name": "家", "address": "某某小区" },
+    { "name": "公司", "address": "某某大厦" }
+  ],
+  "shops": [
+    { "name": "老王鸡排饭", "category": "饭", "areaName": "家", "address": "某某路123号", "reviewCount": 200, "realReviewCount": 170, "platformRating": 4.5 },
+    { "name": "阿强麻辣烫", "category": "麻辣烫", "areaName": "家", "address": "某某路456号", "reviewCount": 80, "realReviewCount": 65, "platformRating": 4.2 },
+    { "name": "赵姐炸鸡", "category": "炸鸡", "areaName": "家", "address": "某某路789号", "reviewCount": 50, "realReviewCount": 40, "platformRating": 4.0 },
+    { "name": "兰州拉面馆", "category": "面", "areaName": "家", "address": "某某路321号", "reviewCount": 300, "realReviewCount": 240, "platformRating": 4.6 },
+    { "name": "张记饺子馆", "category": "饺子", "areaName": "家", "address": "某某路654号", "reviewCount": 5, "realReviewCount": 5, "platformRating": 5.0 },
+    { "name": "柳州螺蛳粉", "category": "粉", "areaName": "家", "address": "某某路258号", "reviewCount": 250, "realReviewCount": 200, "platformRating": 4.4 },
+    { "name": "鲜茶一杯", "category": "奶茶", "areaName": "公司", "address": "某某大厦B1", "reviewCount": 150, "realReviewCount": 120, "platformRating": 4.3 },
+    { "name": "东北烧烤王", "category": "烧烤", "areaName": "公司", "address": "某某路987号", "reviewCount": 500, "realReviewCount": 390, "platformRating": 4.1 },
+    { "name": "小刘粥铺", "category": "粥", "areaName": "公司", "address": "某某路147号", "reviewCount": 3, "realReviewCount": 3, "platformRating": 5.0 },
+    { "name": "粤式煲仔饭", "category": "饭", "areaName": "公司", "address": "某某大厦2F", "reviewCount": 100, "realReviewCount": 82, "platformRating": 4.3 }
+  ],
+  "dishes": [
+    { "shopName": "老王鸡排饭", "name": "招牌鸡排饭", "orderCount": 15 },
+    { "shopName": "老王鸡排饭", "name": "照烧鸡腿饭", "orderCount": 10 },
+    { "shopName": "老王鸡排饭", "name": "咖喱鸡肉饭", "orderCount": 7 },
+    { "shopName": "阿强麻辣烫", "name": "番茄炸蛋冒菜套餐", "orderCount": 12 },
+    { "shopName": "阿强麻辣烫", "name": "麻辣牛肉冒菜", "orderCount": 8 },
+    { "shopName": "赵姐炸鸡", "name": "韩式炸鸡半只", "orderCount": 9 },
+    { "shopName": "赵姐炸鸡", "name": "无骨鸡块", "orderCount": 6 },
+    { "shopName": "兰州拉面馆", "name": "牛肉拉面", "orderCount": 20 },
+    { "shopName": "兰州拉面馆", "name": "大盘鸡拌面", "orderCount": 14 },
+    { "shopName": "兰州拉面馆", "name": "炒刀削面", "orderCount": 8 },
+    { "shopName": "柳州螺蛳粉", "name": "原味螺蛳粉", "orderCount": 18 },
+    { "shopName": "柳州螺蛳粉", "name": "叉烧螺蛳粉", "orderCount": 11 },
+    { "shopName": "东北烧烤王", "name": "羊肉串", "orderCount": 25 },
+    { "shopName": "东北烧烤王", "name": "烤茄子", "orderCount": 16 },
+    { "shopName": "东北烧烤王", "name": "烤鸡翅", "orderCount": 12 },
+    { "shopName": "粤式煲仔饭", "name": "腊味煲仔饭", "orderCount": 10 },
+    { "shopName": "粤式煲仔饭", "name": "滑鸡煲仔饭", "orderCount": 7 },
+    { "shopName": "鲜茶一杯", "name": "珍珠奶茶", "orderCount": 20 },
+    { "shopName": "鲜茶一杯", "name": "杨枝甘露", "orderCount": 14 }
+  ]
+}
