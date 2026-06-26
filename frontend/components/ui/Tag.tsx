@@ -11,7 +11,7 @@ export default function Tag({ label, active = false, onClick, className = '' }: 
       className={`inline-block px-3 py-1 rounded-full text-sm font-medium transition-colors
         ${active
           ? 'bg-orange-500 text-white'
-          : 'bg-gray-100 text-gray-600'}
+          : 'bg-amber-50 text-gray-600'}
         ${onClick ? 'cursor-pointer active:scale-95' : ''}
         ${className}`}
       onClick={onClick}

@@ -59,7 +59,7 @@ export default function ShopForm({ areas, shop, onSaved }: ShopFormProps) {
   };
 
   if (areas.length === 0) {
-    return <p className="text-gray-400 text-sm py-8 text-center">请先在设置中添加配送区域</p>;
+    return <p className="text-gray-600 text-sm py-8 text-center">请先在设置中添加配送区域</p>;
   }
 
   return (
@@ -70,20 +70,20 @@ export default function ShopForm({ areas, shop, onSaved }: ShopFormProps) {
 
       {/* 店铺名称 */}
       <div>
-        <label className="text-sm text-gray-500 mb-1 block">店铺名称</label>
+        <label className="text-sm text-gray-700 mb-1 block">店铺名称</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="例如：老王鸡排饭"
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 text-base
+          className="w-full px-4 py-3 rounded-xl border border-amber-200 text-base
             focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
       </div>
 
       {/* 分类 */}
       <div>
-        <label className="text-sm text-gray-500 mb-1 block">分类</label>
+        <label className="text-sm text-gray-700 mb-1 block">分类</label>
         <div className="flex flex-wrap gap-2">
           {DEFAULT_CATEGORIES.map((cat) => (
             <button
@@ -93,7 +93,7 @@ export default function ShopForm({ areas, shop, onSaved }: ShopFormProps) {
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors
                 ${category === cat
                   ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 text-gray-600'}`}
+                  : 'bg-amber-50 text-gray-600'}`}
             >
               {cat}
             </button>
@@ -103,12 +103,12 @@ export default function ShopForm({ areas, shop, onSaved }: ShopFormProps) {
 
       {/* 区域 */}
       <div>
-        <label className="text-sm text-gray-500 mb-1 block">配送区域</label>
+        <label className="text-sm text-gray-700 mb-1 block">配送区域</label>
         <select
           value={areaId}
           onChange={(e) => setAreaId(Number(e.target.value))}
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 text-base
-            focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
+          className="w-full px-4 py-3 rounded-xl border border-amber-200 text-base
+            focus:outline-none focus:ring-2 focus:ring-orange-400 bg-[#fffdf9]"
         >
           {areas.map((a) => (
             <option key={a.id} value={a.id}>{a.name} — {a.address}</option>
@@ -118,13 +118,13 @@ export default function ShopForm({ areas, shop, onSaved }: ShopFormProps) {
 
       {/* 地址 */}
       <div>
-        <label className="text-sm text-gray-500 mb-1 block">店铺地址（可选）</label>
+        <label className="text-sm text-gray-700 mb-1 block">店铺地址（可选）</label>
         <input
           type="text"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="详细地址"
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 text-base
+          className="w-full px-4 py-3 rounded-xl border border-amber-200 text-base
             focus:outline-none focus:ring-2 focus:ring-orange-400"
         />
       </div>

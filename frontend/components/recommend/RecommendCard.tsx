@@ -21,10 +21,10 @@ const CATEGORY_STYLE: Record<string, { emoji: string; bg: string; text: string }
   烧烤:   { emoji: '🍖', bg: 'bg-amber-50',  text: 'text-amber-700' },
   饺子:   { emoji: '🥟', bg: 'bg-yellow-50', text: 'text-yellow-700' },
   粥:     { emoji: '🥣', bg: 'bg-green-50',  text: 'text-green-700' },
-  其他:   { emoji: '🍽️', bg: 'bg-gray-50',   text: 'text-gray-700' },
+  其他:   { emoji: '🍽️', bg: 'bg-amber-50/30',   text: 'text-gray-700' },
 };
 
-const DEFAULT_STYLE = { emoji: '🍽️', bg: 'bg-gray-50', text: 'text-gray-700' };
+const DEFAULT_STYLE = { emoji: '🍽️', bg: 'bg-amber-50/30', text: 'text-gray-700' };
 
 /** 分数颜色 */
 function scoreColor(score: number): string {
@@ -56,22 +56,22 @@ export default function RecommendCard({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 animate-pulse">
+      <div className="bg-[#fffdf9] rounded-3xl shadow-sm border border-amber-100 p-6 animate-pulse">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-20 h-20 bg-gray-200 rounded-full" />
+          <div className="w-20 h-20 bg-amber-100 rounded-full" />
           <div className="flex-1 space-y-3">
-            <div className="h-5 bg-gray-200 rounded w-1/3" />
-            <div className="h-7 bg-gray-200 rounded w-2/3" />
-            <div className="h-4 bg-gray-200 rounded w-1/2" />
+            <div className="h-5 bg-amber-100 rounded w-1/3" />
+            <div className="h-7 bg-amber-100 rounded w-2/3" />
+            <div className="h-4 bg-amber-100 rounded w-1/2" />
           </div>
         </div>
-        <div className="h-12 bg-gray-200 rounded-2xl" />
+        <div className="h-12 bg-amber-100 rounded-2xl" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-[#fffdf9] rounded-3xl shadow-sm border border-amber-100 overflow-hidden">
       {/* 顶部彩色条 */}
       <div className={`h-1.5 ${catStyle.bg} bg-current ${catStyle.text.replace('text-', 'bg-').replace('-700', '-400')}`}
         style={{ backgroundColor: undefined }}
@@ -91,7 +91,7 @@ export default function RecommendCard({
               {shop.category}
             </span>
             <h2 className="text-xl font-bold text-gray-900 truncate">{shop.name}</h2>
-            <p className="text-sm text-gray-400 truncate mt-0.5">{shop.address}</p>
+            <p className="text-sm text-gray-600 truncate mt-0.5">{shop.address}</p>
           </div>
 
           {/* 分数圆环 */}
@@ -102,7 +102,7 @@ export default function RecommendCard({
                 <div className={`text-xl font-extrabold leading-none ${scoreColor(score)}`}>
                   {score}
                 </div>
-                <div className="text-[10px] text-gray-400 mt-0.5">分</div>
+                <div className="text-[10px] text-gray-600 mt-0.5">分</div>
               </div>
             </div>
             <div className={`text-xs mt-1 ${scoreColor(score)} font-medium`}>
@@ -114,7 +114,7 @@ export default function RecommendCard({
         {/* 招牌菜 */}
         {result.dishes && result.dishes.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs text-gray-400 font-medium mb-2">🔥 热门菜品</p>
+            <p className="text-xs text-gray-600 font-medium mb-2">🔥 热门菜品</p>
             <div className="flex flex-wrap gap-2">
               {result.dishes.map((d) => (
                 <span key={d.id}
@@ -129,24 +129,24 @@ export default function RecommendCard({
         )}
 
         {/* 评论统计条 */}
-        <div className="bg-gray-50 rounded-xl p-3 mb-4">
-          <div className="flex items-center justify-between text-xs text-gray-400 mb-1.5">
+        <div className="bg-amber-50/30 rounded-xl p-3 mb-4">
+          <div className="flex items-center justify-between text-xs text-gray-600 mb-1.5">
             <span>评论可信度</span>
             <span className="font-medium">{shop.realReviewCount} / {shop.reviewCount} 条真实</span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-700 ${trustPct >= 80 ? 'bg-green-400' : trustPct >= 60 ? 'bg-yellow-400' : 'bg-red-400'}`}
               style={{ width: `${trustPct}%` }}
             />
           </div>
-          <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+          <div className="flex justify-between text-[10px] text-gray-600 mt-1">
             <span>0%</span>
             <span>{trustPct}%</span>
             <span>100%</span>
           </div>
           {shop.platformRating && (
-            <div className="text-xs text-gray-400 mt-2 text-center">
+            <div className="text-xs text-gray-600 mt-2 text-center">
               平台评分 ⭐ {shop.platformRating}
             </div>
           )}
@@ -159,7 +159,7 @@ export default function RecommendCard({
           className="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-2xl
             text-sm font-bold shadow-md shadow-orange-200
             hover:from-orange-500 hover:to-orange-600 active:scale-[0.98]
-            disabled:from-gray-200 disabled:to-gray-200 disabled:text-gray-400 disabled:shadow-none
+            disabled:from-gray-200 disabled:to-gray-200 disabled:text-gray-600 disabled:shadow-none
             transition-all duration-200"
         >
           🎲 换一个尝尝

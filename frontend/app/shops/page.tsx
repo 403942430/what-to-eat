@@ -71,13 +71,13 @@ export default function ShopsPage() {
       <CategoryChips selected={category} onSelect={setCategory} />
 
       {/* 数量提示 */}
-      <p className="text-xs text-gray-400 mt-3 mb-2">{filtered.length} 家店铺</p>
+      <p className="text-xs text-gray-600 mt-3 mb-2">{filtered.length} 家店铺</p>
 
       {/* 列表 */}
       {loading ? (
-        <p className="text-gray-400 text-sm text-center py-10">加载中...</p>
+        <p className="text-gray-600 text-sm text-center py-10">加载中...</p>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-gray-600">
           <p className="text-4xl mb-3">🏪</p>
           <p className="text-sm">还没有店铺，点右上角 + 添加</p>
         </div>

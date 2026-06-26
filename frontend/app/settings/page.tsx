@@ -248,7 +248,7 @@ export default function SettingsPage() {
             <div key={a.id} className="flex items-center justify-between  rounded-xl px-3 py-2">
               <div>
                 <span className="font-medium text-sm">{a.name}</span>
-                <span className="text-xs text-gray-400 ml-2">{a.address}</span>
+                <span className="text-xs text-gray-600 ml-2">{a.address}</span>
               </div>
               <button
                 onClick={() => delArea(a.id!)}
@@ -264,14 +264,14 @@ export default function SettingsPage() {
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="区域名（如：家）"
-            className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm
+            className="flex-1 px-3 py-2 rounded-xl border border-amber-200 text-sm
               focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
           <input
             value={newAddr}
             onChange={(e) => setNewAddr(e.target.value)}
             placeholder="地址"
-            className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm
+            className="flex-1 px-3 py-2 rounded-xl border border-amber-200 text-sm
               focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
           <Button size="sm" onClick={addArea}>添加</Button>
@@ -286,7 +286,7 @@ export default function SettingsPage() {
           onChange={(e) => setImportJson(e.target.value)}
           placeholder="粘贴从 Kiwi 脚本导出的 JSON..."
           rows={4}
-          className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm resize-none
+          className="w-full px-3 py-2 rounded-xl border border-amber-200 text-sm resize-none
             focus:outline-none focus:ring-2 focus:ring-orange-400 mb-2"
         />
         <Button size="sm" onClick={handleImport} className="w-full">
@@ -302,7 +302,7 @@ export default function SettingsPage() {
       {/* 数据备份 */}
       <Card>
         <h2 className="font-bold mb-3">📤 数据备份</h2>
-        <p className="text-sm text-gray-400 mb-3">
+        <p className="text-sm text-gray-600 mb-3">
           导出全部数据（店铺、订单、评分、规则）为 JSON 文件
         </p>
         <Button variant="secondary" size="sm" onClick={handleExport} className="w-full">

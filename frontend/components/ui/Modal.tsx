@@ -29,12 +29,12 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
         onClick={onClose}
       />
       {/* 内容 */}
-      <div className="relative bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md
+      <div className="relative bg-[#fffdf9] rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md
         max-h-[85vh] overflow-y-auto p-5 shadow-xl animate-slide-up">
         {title && (
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold">{title}</h3>
-            <button onClick={onClose} className="text-gray-400 text-xl leading-none">
+            <button onClick={onClose} className="text-gray-600 text-xl leading-none">
               ✕
             </button>
           </div>

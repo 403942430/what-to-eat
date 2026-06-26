@@ -82,7 +82,7 @@ export default function Home() {
           <h1 className="text-lg font-extrabold text-gray-900">
             🏆 今天吃什么
           </h1>
-          <p className="text-xs text-gray-400 mt-0.5">每天纠结的终结者</p>
+          <p className="text-xs text-gray-600 mt-0.5">每天纠结的终结者</p>
         </div>
         <NetworkBadge status={networkStatus} />
       </div>
@@ -106,10 +106,10 @@ export default function Home() {
           ) : (
             <div className="text-center py-16">
               <div className="text-6xl mb-4 animate-bounce">🤔</div>
-              <p className="text-gray-400 font-medium">
+              <p className="text-gray-600 font-medium">
                 {initDone ? '该区域还没有店铺' : '加载中...'}
               </p>
-              <p className="text-gray-300 text-sm mt-1">
+              <p className="text-gray-700 text-sm mt-1">
                 {initDone ? '去 🏪 店铺 添加几家吧' : ''}
               </p>
             </div>
@@ -117,8 +117,8 @@ export default function Home() {
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📍</div>
-            <p className="text-gray-400 font-medium">还没有配送区域</p>
-            <p className="text-gray-300 text-sm mt-1">去 ⚙️ 设置 添加「家」或「公司」</p>
+            <p className="text-gray-600 font-medium">还没有配送区域</p>
+            <p className="text-gray-700 text-sm mt-1">去 ⚙️ 设置 添加「家」或「公司」</p>
           </div>
         )}
       </div>

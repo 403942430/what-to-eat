@@ -14,10 +14,10 @@ export default function AddShopPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 px-4 pt-4">
+    <div className="min-h-screen bg-amber-50/30 pb-20 px-4 pt-4">
       <button
         onClick={() => router.back()}
-        className="text-gray-400 text-sm mb-4"
+        className="text-gray-600 text-sm mb-4"
       >
         ← 返回
       </button>

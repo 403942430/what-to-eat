@@ -19,7 +19,7 @@ const statusConfig: Record<NetworkStatus, { label: string; color: string; dot: s
   },
   offline: {
     label: '离线',
-    color: 'bg-gray-100 text-gray-500 border-gray-200',
+    color: 'bg-amber-50 text-gray-700 border-amber-200',
     dot: 'bg-gray-400',
   },
 };

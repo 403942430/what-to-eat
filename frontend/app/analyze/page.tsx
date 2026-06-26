@@ -41,7 +41,7 @@ export default function AnalyzePage() {
         onChange={(e) => setText(e.target.value)}
         placeholder="粘贴需要分析的评论文本..."
         rows={4}
-        className="w-full px-4 py-3 rounded-xl border border-gray-200 text-base resize-none
+        className="w-full px-4 py-3 rounded-xl border border-amber-200 text-base resize-none
           focus:outline-none focus:ring-2 focus:ring-orange-400 mb-3"
       />
       <Button onClick={handleAnalyze} disabled={loading || !text.trim()} className="w-full mb-4">
@@ -60,7 +60,7 @@ export default function AnalyzePage() {
               <div className="font-bold text-lg">
                 {result.isFake ? '疑似虚假评论' : '可能是真实评论'}
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-gray-600">
                 置信度 {(result.confidence * 100).toFixed(0)}% · 来源{' '}
                 {result.source === 'cloud' ? '云端ML' : '本地规则'}
               </div>
@@ -69,7 +69,7 @@ export default function AnalyzePage() {
 
           {result.indicators.length > 0 && (
             <details className="text-sm">
-              <summary className="cursor-pointer text-gray-500 mb-2">
+              <summary className="cursor-pointer text-gray-700 mb-2">
                 命中规则 ({result.indicators.length})
               </summary>
               <div className="space-y-1 mt-2">
@@ -79,7 +79,7 @@ export default function AnalyzePage() {
                       {ind.type}
                     </span>
                     <span className="font-mono text-sm">{ind.word}</span>
-                    <span className="text-xs text-gray-400 ml-auto">
+                    <span className="text-xs text-gray-600 ml-auto">
                       权重 {ind.weight.toFixed(1)}
                     </span>
                   </div>

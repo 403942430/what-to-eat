@@ -37,9 +37,9 @@ export default function HistoryPage() {
       <h1 className="text-lg font-bold mb-4">📋 推荐历史</h1>
 
       {loading ? (
-        <p className="text-gray-400 text-sm text-center py-10">加载中...</p>
+        <p className="text-gray-600 text-sm text-center py-10">加载中...</p>
       ) : items.length === 0 ? (
-        <div className="text-center py-20 text-gray-400">
+        <div className="text-center py-20 text-gray-600">
           <p className="text-4xl mb-3">📋</p>
           <p className="text-sm">还没有推荐记录</p>
         </div>
@@ -53,12 +53,12 @@ export default function HistoryPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="font-medium text-sm">{item.shopName}</span>
-                  <span className="text-xs text-gray-400 ml-2">{item.shopCategory}</span>
+                  <span className="text-xs text-gray-600 ml-2">{item.shopCategory}</span>
                 </div>
-                <div className="text-right text-xs text-gray-400">
+                <div className="text-right text-xs text-gray-600">
                   <div>{new Date(item.createdAt).toLocaleDateString('zh-CN')}</div>
                   {item.accepted !== undefined && (
-                    <div className={item.accepted ? 'text-green-500' : 'text-gray-400'}>
+                    <div className={item.accepted ? 'text-green-500' : 'text-gray-600'}>
                       {item.accepted ? '已采纳' : '未采纳'}
                     </div>
                   )}

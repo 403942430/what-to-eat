@@ -18,7 +18,7 @@ export default function ShopCard({ shop }: ShopCardProps) {
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+            <span className="text-xs bg-amber-50 text-gray-700 px-2 py-0.5 rounded-full">
               {shop.category}
             </span>
             {!shop.isActive && (
@@ -28,13 +28,13 @@ export default function ShopCard({ shop }: ShopCardProps) {
             )}
           </div>
           <h3 className="font-bold text-base truncate">{shop.name}</h3>
-          <p className="text-sm text-gray-400 truncate mt-0.5">{shop.address}</p>
+          <p className="text-sm text-gray-600 truncate mt-0.5">{shop.address}</p>
         </div>
         <div className="text-right ml-3">
           <div className="text-lg font-bold text-orange-500">
             {(bScore * 100).toFixed(0)}
           </div>
-          <div className="text-xs text-gray-400">
+          <div className="text-xs text-gray-600">
             {shop.realReviewCount}/{shop.reviewCount}评
           </div>
         </div>

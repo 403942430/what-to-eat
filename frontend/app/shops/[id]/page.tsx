@@ -29,7 +29,7 @@ export default function ShopDetailPage() {
   if (!shop) {
     return (
       <div className="min-h-screen  px-4 pt-4 pb-20 flex items-center justify-center">
-        <p className="text-gray-400">加载中...</p>
+        <p className="text-gray-600">加载中...</p>
       </div>
     );
   }
@@ -47,8 +47,8 @@ export default function ShopDetailPage() {
   return (
     <div className="min-h-screen  pb-20">
       {/* 头部 */}
-      <div className=" px-4 pt-4 pb-6 border-b border-gray-100">
-        <button onClick={() => router.back()} className="text-gray-400 text-sm mb-3">
+      <div className=" px-4 pt-4 pb-6 border-b border-amber-100">
+        <button onClick={() => router.back()} className="text-gray-600 text-sm mb-3">
           ← 返回
         </button>
         <div className="flex items-start justify-between">
@@ -58,16 +58,16 @@ export default function ShopDetailPage() {
               {!shop.isActive && <Tag label="已隐藏" />}
             </div>
             <h1 className="text-xl font-bold mt-1">{shop.name}</h1>
-            <p className="text-sm text-gray-400 mt-0.5">{shop.address}</p>
+            <p className="text-sm text-gray-600 mt-0.5">{shop.address}</p>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-orange-500">
               {(bScore * 100).toFixed(0)}
             </div>
-            <div className="text-xs text-gray-400">贝叶斯评分</div>
+            <div className="text-xs text-gray-600">贝叶斯评分</div>
           </div>
         </div>
-        <div className="flex gap-4 mt-3 text-xs text-gray-400">
+        <div className="flex gap-4 mt-3 text-xs text-gray-600">
           <span>真实评论 {shop.realReviewCount}</span>
           <span>总评论 {shop.reviewCount}</span>
           {shop.platformRating && <span>平台 {shop.platformRating}⭐</span>}
@@ -94,10 +94,10 @@ export default function ShopDetailPage() {
                     className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-colors
                       ${score === opt.value
                         ? 'bg-orange-50 ring-2 ring-orange-400'
-                        : ' hover:bg-gray-100'}`}
+                        : ' hover:bg-amber-50'}`}
                   >
                     <span className="text-2xl">{opt.emoji}</span>
-                    <span className="text-xs text-gray-500">{opt.label}</span>
+                    <span className="text-xs text-gray-700">{opt.label}</span>
                   </button>
                 ))}
               </div>
@@ -106,7 +106,7 @@ export default function ShopDetailPage() {
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="写点笔记（味道怎么样、分量如何...）"
                 rows={3}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm resize-none
+                className="w-full px-3 py-2 rounded-xl border border-amber-200 text-sm resize-none
                   focus:outline-none focus:ring-2 focus:ring-orange-400"
               />
               <Button onClick={handleRate} disabled={saving} size="sm" className="w-full">
@@ -118,9 +118,9 @@ export default function ShopDetailPage() {
 
         {/* 历史评价列表 */}
         {ratingsLoading ? (
-          <p className="text-gray-400 text-sm text-center py-5">加载中...</p>
+          <p className="text-gray-600 text-sm text-center py-5">加载中...</p>
         ) : ratings.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-5">还没有评价记录</p>
+          <p className="text-gray-600 text-sm text-center py-5">还没有评价记录</p>
         ) : (
           <div className="space-y-2">
             {ratings.map((r) => (
@@ -131,7 +131,7 @@ export default function ShopDetailPage() {
                   </span>
                   <div className="flex-1 min-w-0">
                     {r.note && <p className="text-sm text-gray-700">{r.note}</p>}
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-gray-600 mt-0.5">
                       {new Date(r.createdAt).toLocaleDateString('zh-CN')}
                     </p>
                   </div>
