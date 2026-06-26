@@ -29,7 +29,12 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="h-full antialiased">
       <head>
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}`,
+          }}
+        />
       </head>
       <body className="min-h-full bg-gray-50 text-gray-900">
         {children}
