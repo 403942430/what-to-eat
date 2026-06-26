@@ -14,7 +14,7 @@
 (function () {
   'use strict';
 
-  const API_BASE = 'http://localhost:8000';  // Railway 部署后修改
+  const API_BASE = 'https://what-to-eat-production-35c2.up.railway.app';  // Railway 部署后修改
   const USER_TOKEN = localStorage.getItem('wte_token') || generateToken();
   localStorage.setItem('wte_token', USER_TOKEN);
 

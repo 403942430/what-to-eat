@@ -18,7 +18,8 @@ export const RULE_MIN_WEIGHT = 0.1;          // 低于此权重删除
 export const RULE_USER_CORRECT_FACTOR = 0.5; // 用户纠错降权系数
 
 /** API */
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'https://what-to-eat-production-35c2.up.railway.app';
 export const API_TIMEOUT_MS = 5000;
 
 /** 默认分类 */
