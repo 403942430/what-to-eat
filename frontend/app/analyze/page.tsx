@@ -1,18 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { analyzeReview, type AnalysisResult } from '@/lib/api';
 import { useAppStore } from '@/lib/store';
 import NetworkBadge from '@/components/NetworkBadge';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 
-export default function AnalyzePage() {
+function AnalyzeContent() {
+  const searchParams = useSearchParams();
   const networkStatus = useAppStore((s) => s.networkStatus);
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState('');
+
+  // 接收其他 App 分享过来的文本
+  useEffect(() => {
+    const shared = searchParams.get('text');
+    if (shared) {
+      setText(decodeURIComponent(shared));
+      // 自动分析
+      analyzeReview(decodeURIComponent(shared)).then(setResult).catch(() => {});
+    }
+  }, [searchParams]);
 
   const handleAnalyze = async () => {
     if (!text.trim()) return;
@@ -90,5 +102,13 @@ export default function AnalyzePage() {
         </Card>
       )}
     </div>
+  );
+}
+
+export default function AnalyzePage() {
+  return (
+    <Suspense fallback={<div className="p-4 text-gray-600">加载中...</div>}>
+      <AnalyzeContent />
+    </Suspense>
   );
 }
