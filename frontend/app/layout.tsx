@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import BottomNav from '@/components/ui/BottomNav';
+import SWRegister from '@/components/SWRegister';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -30,13 +31,9 @@ export default function RootLayout({
     <html lang="zh-CN" className="h-full antialiased">
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}`,
-          }}
-        />
       </head>
       <body className="min-h-full bg-gray-50 text-gray-900">
+        <SWRegister />
         {children}
         <BottomNav />
       </body>
