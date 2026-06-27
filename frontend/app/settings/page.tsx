@@ -144,16 +144,16 @@ export default function SettingsPage() {
 
     // 店铺
     const shopsData = [
-      { name: '老王鸡排饭',   category: '饭',   areaId: homeId },
-      { name: '阿强麻辣烫',   category: '麻辣烫', areaId: homeId },
-      { name: '赵姐炸鸡',     category: '炸鸡',   areaId: homeId },
-      { name: '兰州拉面馆',   category: '面',     areaId: homeId },
-      { name: '张记饺子馆',   category: '饺子',   areaId: homeId },
-      { name: '柳州螺蛳粉',   category: '粉',     areaId: homeId },
-      { name: '鲜茶一杯',     category: '奶茶',   areaId: workId },
-      { name: '东北烧烤王',   category: '烧烤',   areaId: workId },
-      { name: '小刘粥铺',     category: '粥',     areaId: workId },
-      { name: '粤式煲仔饭',   category: '饭',     areaId: workId },
+      { name: '华莱士·炸鸡汉堡', category: '炸鸡',   areaId: homeId },
+      { name: '张亮麻辣烫',     category: '麻辣烫', areaId: homeId },
+      { name: '肯德基宅急送',   category: '炸鸡',   areaId: homeId },
+      { name: '兰州拉面',       category: '面',     areaId: homeId },
+      { name: '沙县小吃',       category: '饭',     areaId: homeId },
+      { name: '柳州螺蛳粉',     category: '粉',     areaId: homeId },
+      { name: '蜜雪冰城',       category: '奶茶',   areaId: workId },
+      { name: '杨国福麻辣烫',   category: '麻辣烫', areaId: workId },
+      { name: '东北饺子馆',     category: '饺子',   areaId: workId },
+      { name: '真功夫',         category: '饭',     areaId: workId },
     ];
     const shopIds: Record<string, number> = {};
     for (const s of shopsData) {
@@ -172,14 +172,15 @@ export default function SettingsPage() {
 
     // 菜品
     const dishesData: [string, string, number][] = [
-      ['老王鸡排饭','招牌鸡排饭',15], ['老王鸡排饭','照烧鸡腿饭',10], ['老王鸡排饭','咖喱鸡肉饭',7],
-      ['阿强麻辣烫','番茄炸蛋冒菜套餐',12], ['阿强麻辣烫','麻辣牛肉冒菜',8],
-      ['赵姐炸鸡','韩式炸鸡半只',9], ['赵姐炸鸡','无骨鸡块',6],
-      ['兰州拉面馆','牛肉拉面',20], ['兰州拉面馆','大盘鸡拌面',14], ['兰州拉面馆','炒刀削面',8],
-      ['柳州螺蛳粉','原味螺蛳粉',18], ['柳州螺蛳粉','叉烧螺蛳粉',11],
-      ['东北烧烤王','羊肉串',25], ['东北烧烤王','烤茄子',16], ['东北烧烤王','烤鸡翅',12],
-      ['粤式煲仔饭','腊味煲仔饭',10], ['粤式煲仔饭','滑鸡煲仔饭',7],
-      ['鲜茶一杯','珍珠奶茶',20], ['鲜茶一杯','杨枝甘露',14],
+      ['华莱士·炸鸡汉堡','香辣鸡腿堡套餐',20], ['华莱士·炸鸡汉堡','脆皮全鸡',15], ['华莱士·炸鸡汉堡','薯条+可乐',12],
+      ['张亮麻辣烫','番茄炸蛋冒菜',10], ['张亮麻辣烫','麻辣牛肉套餐',8],
+      ['肯德基宅急送','吮指原味鸡',25], ['肯德基宅急送','香辣鸡翅桶',18],
+      ['兰州拉面','牛肉拉面',22], ['兰州拉面','大盘鸡拌面',14],
+      ['柳州螺蛳粉','原味螺蛳粉+卤蛋',16], ['柳州螺蛳粉','叉烧螺蛳粉',10],
+      ['蜜雪冰城','冰鲜柠檬水',30], ['蜜雪冰城','珍珠奶茶',20],
+      ['杨国福麻辣烫','骨汤麻辣烫',14], ['杨国福麻辣烫','番茄麻辣烫',9],
+      ['真功夫','香菇滑鸡饭',16], ['真功夫','排骨饭',12],
+      ['东北饺子馆','猪肉白菜水饺',10], ['东北饺子馆','三鲜水饺',7],
     ];
     for (const [shopName, dishName, count] of dishesData) {
       await db.dishes.add({
