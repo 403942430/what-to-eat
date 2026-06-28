@@ -1,7 +1,7 @@
 /**
- * 今天吃什么 — 淘宝闪购 / 任意外卖App 评论自动分析
- * AutoJs6 v6.7.0 + PaddleOCR 插件
- * 权限：无障碍服务 + 屏幕截图
+ * 今天吃什么 — 淘宝闪购评论分析助手
+ * AutoJs6 v6.7.0
+ * 用法：淘宝里长按复制评论文字 → 点悬浮窗 → 粘贴 → 自动分析
  */
 
 "auto";
@@ -9,207 +9,188 @@ console.show();
 
 var API_URL = "https://what-to-eat-production-35c2.up.railway.app/api/analyze-review";
 var TOKEN = "wte_" + device.serial;
-var running = false;
 
-// ====================== OCR 提取屏幕文字 ======================
-function extractScreenText() {
-    // 检查OCR插件
-    if (!ocr || !ocr.detect) {
-        toast("⚠️ 请先安装 PaddleOCR 插件\nAutoJs6 → 插件中心 → Paddle OCR");
-        return [];
-    }
+// ====================== 分析面板 ======================
+var panelWindow = null;
+var resultWindow = null;
 
-    toast("📸 截屏+OCR识别中...");
+function showPanel() {
+    if (panelWindow) { panelWindow.close(); panelWindow = null; return; }
+    if (resultWindow) { resultWindow.close(); resultWindow = null; }
+
+    panelWindow = floaty.rawWindow(
+        <card w="*" h="auto" cardCornerRadius="16dp" cardElevation="12dp"
+            gravity="center" margin="20 0" padding="16">
+            <vertical>
+                <text text="🔍 评论分析" textSize="18sp" textStyle="bold"
+                    textColor="#333" marginBottom="12"/>
+                <input id="input" hint="粘贴评论文字到这里..." textSize="14sp"
+                    h="120" gravity="top" singleLine="false"
+                    background="#f5f5f5" padding="12" marginBottom="12"/>
+                <horizontal gravity="right">
+                    <button id="close" text="关闭" textSize="14sp"
+                        style="Widget.AppCompat.Button.Borderless"
+                        textColor="#999" marginRight="8"/>
+                    <button id="analyze" text="分析" textSize="14sp"
+                        style="Widget.AppCompat.Button.Borderless"
+                        textColor="#f97316" textStyle="bold"/>
+                </horizontal>
+                <text id="status" text="" textSize="12sp" textColor="#999" marginTop="8"/>
+            </vertical>
+        </card>
+    );
+
+    panelWindow.close.on("click", function() {
+        panelWindow.close(); panelWindow = null;
+    });
+
+    panelWindow.analyze.on("click", function() {
+        var text = panelWindow.input.getText().toString().trim();
+        if (!text) {
+            panelWindow.status.setText("请先粘贴评论文字");
+            return;
+        }
+        panelWindow.status.setText("分析中...");
+        panelWindow.close(); panelWindow = null;
+        doAnalyze(text);
+    });
+
+    // 获取剪贴板内容并填入
     try {
-        var img = images.captureScreen();
-        if (!img) { toast("⚠️ 截屏失败"); return []; }
+        var clip = getClip();
+        if (clip && clip.length >= 5) {
+            panelWindow.input.setText(clip);
+            panelWindow.status.setText("✅ 已读取剪贴板，点「分析」即可");
+        }
+    } catch(e) {}
+}
 
-        // OCR识别
-        var results = ocr.detect(img, { mode: "zh" });
-        img.recycle();
-
-        var texts = [];
-        results.forEach(function(r) {
-            if (r.text && r.text.trim().length >= 2) {
-                texts.push({ text: r.text.trim(), y: r.bounds ? r.bounds.top : 0 });
-            }
+// ====================== 执行分析 ======================
+function doAnalyze(text) {
+    showResult("⏳ 正在分析...", "#999");
+    try {
+        var resp = http.postJson(API_URL, {
+            text: text,
+            user_token: TOKEN
         });
-        return texts;
+        if (resp.statusCode == 200) {
+            var data = resp.body.json();
+            var isFake = data.is_fake;
+            var conf = Math.round(data.confidence * 100);
+            var indicators = data.indicators || [];
+            var source = "云端ML";
+
+            var lines = [
+                (isFake ? "🔴 疑似虚假评论" : "🟢 可能是真实评论"),
+                "置信度: " + conf + "%",
+                "来源: " + source,
+                ""
+            ];
+            if (indicators.length > 0) {
+                lines.push("命中规则:");
+                indicators.forEach(function(ind) {
+                    lines.push("  · " + ind.word + " (" + ind.type + ")");
+                });
+            }
+            showResult(lines.join("\n"), isFake ? "#dc2626" : "#16a34a");
+        } else {
+            showResult("⚠️ API 返回错误\n" + resp.statusMessage, "#999");
+        }
     } catch (e) {
-        toast("⚠️ OCR失败：" + e.message);
-        return [];
+        // 离线模式
+        showResult("📡 离线模式\n无法连接分析服务\n结果仅供参考", "#f97316");
     }
 }
 
-// ====================== 评论分析 ======================
-function analyzeReviews() {
-    if (running) { toast("⏳ 正在分析中，请等待"); return; }
-    running = true;
+// ====================== 结果显示 ======================
+function showResult(text, color) {
+    if (resultWindow) resultWindow.close();
 
-    var texts = extractScreenText();
-    if (texts.length === 0) { running = false; return; }
+    resultWindow = floaty.rawWindow(
+        <card w="*" h="auto" cardCornerRadius="16dp" cardElevation="12dp"
+            gravity="center" margin="20 0" padding="16">
+            <vertical>
+                <text id="title" text="分析结果" textSize="18sp" textStyle="bold"
+                    textColor="#333" marginBottom="12"/>
+                <text id="content" text={text} textSize="15sp"
+                    textColor={color} lineSpacingMultiplier="1.4" marginBottom="12"/>
+                <button id="dismiss" text="关闭" textSize="14sp"
+                    style="Widget.AppCompat.Button.Borderless" textColor="#999"/>
+            </vertical>
+        </card>
+    );
 
-    var candidates = [];
-    var seen = {};
-    var uiNoise = [
-        "设置","搜索","首页","我的","购物车","客服","收藏","关注",
-        "分享","举报","回复","点赞","评论","更多","筛选","排序",
-        "推荐","价格","销量","评分","添加","删除","编辑","保存",
-        "取消","提交","确认","返回","关闭","退出","登录","注册",
-        "优惠","红包","满减","配送","自提","评价","已售","月售",
-        "起送","距离","分钟","小时","公里","米","去支付","立即",
-        "加入","购物","订单","售后","退款","投诉","商家","品牌",
-        "满意","不满意","包装","味道","新鲜","好吃","难吃","分量",
-    ];
-
-    texts.forEach(function(t) {
-        var text = t.text;
-        if (!text || text.length < 10 || text.length > 2000 || seen[text]) return;
-        if (/^[\d\.\-\/\s:：￥¥\*★☆]+$/.test(text)) return;
-        // 跳过纯UI文字
-        var isNoise = false;
-        for (var i = 0; i < uiNoise.length; i++) {
-            if (text === uiNoise[i]) { isNoise = true; break; }
-        }
-        if (isNoise) return;
-        // 必须包含中文
-        var cn = 0;
-        for (var j = 0; j < text.length; j++) {
-            var c = text.charCodeAt(j);
-            if (c >= 0x4e00 && c <= 0x9fff) cn++;
-        }
-        if (cn < 4) return;
-
-        seen[text] = true;
-        candidates.push(text);
+    resultWindow.dismiss.on("click", function() {
+        resultWindow.close(); resultWindow = null;
     });
 
-    if (candidates.length === 0) {
-        toast("⚠️ 未找到评论文字\n请确保在评论区页面使用");
-        running = false;
-        return;
-    }
-
-    toast("📊 识别到 " + candidates.length + " 条文本，开始云端分析...");
-    var processed = 0, fakeCount = 0, realCount = 0, total = candidates.length;
-
-    candidates.forEach(function(text, idx) {
-        try {
-            var resp = http.postJson(API_URL, {
-                text: text,
-                user_token: TOKEN
-            });
-            if (resp.statusCode == 200) {
-                var data = resp.body.json();
-                processed++;
-                if (data.is_fake) fakeCount++; else realCount++;
-            }
-        } catch (e) {
-            processed++;
-        }
-        // 进度更新
-        if ((idx + 1) % 3 === 0 || idx === total - 1) {
-            toast("⏳ " + (idx + 1) + "/" + total +
-                "\n🔴可疑 " + fakeCount + "  🟢可信 " + realCount);
-        }
-    });
-
-    running = false;
-    toast("🎉 分析完成！\n📊 共 " + total + " 条\n"
-        + "🔴 可疑 " + fakeCount + " 条\n"
-        + "🟢 可信 " + realCount + " 条\n"
-        + "💡 精确率 " + (total > 0 ? Math.round(fakeCount/total*100) : 0) + "% 可疑");
+    // 3秒后自动关闭
+    setTimeout(function() {
+        if (resultWindow) { resultWindow.close(); resultWindow = null; }
+    }, 5000);
 }
 
 // ====================== 店铺抓取 ======================
 function scrapeShop() {
-    if (running) return;
-    var texts = extractScreenText();
-    if (texts.length === 0) return;
+    try {
+        var clip = getClip();
+        var data = JSON.parse(clip);
+        toast("✅ 检测到剪贴板JSON数据\n店铺：" + (data.shop ? data.shop.name : "未知"));
+        return;
+    } catch(e) {}
 
-    var shopName = "", dishes = [], seen = {};
-    var shopKeys = ["店","餐厅","馆","厨房","小厨","食府","美食","外卖"];
-    var dishKeys = ["饭","面","粉","鸡","鸭","鱼","肉","虾","蟹","牛",
-        "猪","羊","菜","汤","煲","锅","串","堡","卷","饺","粥","排",
-        "翅","腿","丸","饼","包","卤","烤","炸","炒","蒸","煮"];
+    // 从无障碍树尝试提取店名
+    var shopName = "";
+    try {
+        var root = auto.root;
+        if (root) _findShop(root);
+    } catch(e) {}
 
-    texts.forEach(function(t) {
-        var text = t.text;
-        if (!text || text.length < 2 || seen[text]) return;
-        seen[text] = true;
-        // 店名
-        if (!shopName && text.length <= 25) {
-            for (var i = 0; i < shopKeys.length; i++) {
-                if (text.indexOf(shopKeys[i]) >= 0) { shopName = text; break; }
+    function _findShop(node) {
+        if (shopName || !node) return;
+        try {
+            var t = node.text ? node.text.toString().trim() : "";
+            if (t.length >= 2 && t.length <= 30 &&
+                (t.indexOf("店") >= 0 || t.indexOf("馆") >= 0 || t.indexOf("餐厅") >= 0)) {
+                shopName = t;
             }
-        }
-        // 菜品
-        if (text.length >= 2 && text.length <= 25 && dishes.length < 30) {
-            for (var j = 0; j < dishKeys.length; j++) {
-                if (text.indexOf(dishKeys[j]) >= 0) {
-                    if (dishes.indexOf(text) < 0) dishes.push(text);
-                    break;
-                }
-            }
-        }
-    });
+            var c = node.childCount;
+            for (var i = 0; i < c; i++) _findShop(node.child(i));
+        } catch(e) {}
+    }
 
     var result = {
         shop: shopName ? { name: shopName, platform: "淘宝闪购" } : null,
-        dishes: dishes.slice(0, 25),
-        exportedAt: new Date().toISOString()
+        hint: "在店铺页面使用，或手动粘贴JSON"
     };
     setClip(JSON.stringify(result, null, 2));
-    toast("✅ 已复制到剪贴板！\n店铺：" + (shopName || "未识别")
-        + "\n菜品：" + dishes.length + " 道\n打开PWA → 设置 → 粘贴导入");
+    toast("📋 " + (shopName ? "已抓取：" + shopName : "未识别店铺\n请确保在店铺页面使用"));
 }
 
-// ====================== 大号浮动按钮 ======================
-var floatBtn = null;
-
+// ====================== 浮动按钮 ======================
 function createFloat() {
-    floatBtn = floaty.rawWindow(
-        <frame gravity="right|center_vertical" margin="0 0 0 12">
+    var w = floaty.rawWindow(
+        <frame gravity="right|center_vertical" margin="0 0 0 8">
             <vertical>
                 <button id="btn1"
-                    style="width:56;height:56;borderRadius:28;
-                    background:#f97316;color:#fff;fontSize:18;
-                    elevation:10;border:none;marginBottom:12;"
+                    style="width:52;height:52;borderRadius:26;
+                    background:#f97316;color:#fff;fontSize:20;
+                    elevation:10;border:none;marginBottom:10;"
                     text="🔍"/>
                 <button id="btn2"
-                    style="width:56;height:56;borderRadius:28;
-                    background:#fff;color:#f97316;fontSize:18;
+                    style="width:52;height:52;borderRadius:26;
+                    background:#fff;color:#f97316;fontSize:20;
                     elevation:8;border:2px solid #f97316;"
                     text="📋"/>
             </vertical>
         </frame>
     );
 
-    floatBtn.btn1.on("click", function() {
-        toast("🔍 开始分析评论...");
-        setTimeout(analyzeReviews, 500);
-    });
-
-    floatBtn.btn2.on("click", function() {
-        toast("📋 开始抓取店铺...");
-        setTimeout(scrapeShop, 500);
-    });
-
-    // 让按钮可拖动
-    floatBtn.setPosition(device.width - 80, device.height / 3);
+    w.btn1.on("click", showPanel);
+    w.btn2.on("click", scrapeShop);
+    w.setPosition(device.width - 72, device.height / 3);
 }
 
 // ====================== 启动 ======================
-toast("🚀 启动中...");
-if (!auto.service) {
-    toast("请开启无障碍服务\n设置 → 无障碍 → AutoJs6");
-    auto.waitFor();
-}
-
-// 申请截图权限
-if (!images.requestScreenCapture()) {
-    toast("⚠️ 需要屏幕截图权限");
-}
-
 createFloat();
-toast("✅ 今天吃什么助手已就绪\n右侧两个圆形按钮：\n🔍分析评论  📋抓取店铺");
+toast("✅ 今天吃什么助手已就绪\n复制评论 → 点🔍 → 自动分析");
