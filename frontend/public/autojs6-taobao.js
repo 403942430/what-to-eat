@@ -1,93 +1,113 @@
 "auto";
-console.log("🚀 启动中...");
+console.show();
+console.log("🚀 今天吃什么 v3 — OCR 截图识别版");
 
 var API_URL = "https://what-to-eat-production-35c2.up.railway.app/api/analyze-review";
 var TOKEN = "wte_" + device.serial;
 var panelWindow = null;
 var resultWindow = null;
 
-// ====================== 分析面板 ======================
-function showPanel() {
-    if (panelWindow) { panelWindow.close(); panelWindow = null; return; }
+// ====================== OCR 截图 + 分析 ======================
+function analyzeFromScreen() {
+    if (panelWindow) { panelWindow.close(); panelWindow = null; }
     if (resultWindow) { resultWindow.close(); resultWindow = null; }
 
-    panelWindow = floaty.rawWindow(
-        <card w="*" h="auto" cardCornerRadius="16dp" cardElevation="12dp"
-            gravity="center" margin="20 0" padding="16">
-            <vertical>
-                <text text="🔍 评论分析" textSize="18sp" textStyle="bold"
-                    textColor="#333" marginBottom="12"/>
-                <input id="input" hint="粘贴评论..." textSize="14sp"
-                    h="120" gravity="top" singleLine="false"
-                    background="#f5f5f5" padding="12" marginBottom="12"/>
-                <horizontal gravity="right">
-                    <button id="btnClose" text="关闭" textSize="14sp" textColor="#999" marginRight="8"/>
-                    <button id="btnGo" text="分析" textSize="14sp" textColor="#f97316" textStyle="bold"/>
-                </horizontal>
-                <text id="status" text="" textSize="12sp" textColor="#999" marginTop="8"/>
-            </vertical>
-        </card>
-    );
-
-    // 自动填入剪贴板
     try {
-        var clip = getClip();
-        if (clip && clip.length >= 5) {
-            ui.run(function() {
-                panelWindow.input.setText(clip);
-                panelWindow.status.setText("✅ 已自动填入剪贴板");
-            });
-        }
-    } catch(e) {}
+        toast("📸 截屏+OCR识别中...");
+        requestScreenCapture();
+        sleep(500);
+        var img = captureScreen();
+        if (!img) { toast("⚠️ 截屏失败"); return; }
 
-    // AutoJs6 v6 点击事件：用 click() 设置回调
-    panelWindow.btnClose.click(function() {
-        panelWindow.close(); panelWindow = null;
-    });
-
-    panelWindow.btnGo.click(function() {
-        var text = panelWindow.input.getText().toString().trim();
-        if (!text) {
-            panelWindow.status.setText("请先粘贴评论文字");
+        // 尝试内置 OCR 模块
+        var results = [];
+        try {
+            results = ocr.detect(img, { mode: "zh" });
+        } catch (e) {
+            img.recycle();
+            toast("⚠️ OCR模块不可用\n需要安装PaddleOCR插件\nAutoJs6主页→插件中心→Paddle OCR");
             return;
         }
-        panelWindow.status.setText("分析中...");
-        panelWindow.close(); panelWindow = null;
-        doAnalyze(text);
-    });
-}
 
-// ====================== 分析 ======================
-function doAnalyze(text) {
-    showResult("⏳ 分析中...", "#999");
-    try {
-        var resp = http.postJson(API_URL, { text: text, user_token: TOKEN });
-        if (resp.statusCode == 200) {
-            var data = resp.body.json();
-            var isFake = data.is_fake;
-            var conf = Math.round(data.confidence * 100);
-            var indicators = data.indicators || [];
-            var lines = [
-                (isFake ? "🔴 疑似虚假评论" : "🟢 可能是真实评论"),
-                "置信度: " + conf + "%",
-                "来源: 云端ML"
-            ];
-            if (indicators.length > 0) {
-                lines.push("");
-                lines.push("命中规则:");
-                indicators.forEach(function(ind) {
-                    lines.push("  · " + ind.word + " (" + ind.type + ")");
-                });
+        // 提取文字
+        var texts = [];
+        results.forEach(function(r) {
+            if (r.text && r.text.trim().length >= 8) {
+                texts.push({ text: r.text.trim(), y: r.bounds ? r.bounds.top : 9999 });
             }
-            showResult(lines.join("\n"), isFake ? "#dc2626" : "#16a34a");
-        } else {
-            showResult("⚠️ API 错误", "#999");
+        });
+        img.recycle();
+
+        // 过滤UI噪音
+        var noise = ["设置","搜索","首页","购物车","订单","我的","客服","收藏",
+            "关注","分享","举报","回复","点赞","更多","筛选","排序",
+            "推荐","价格","销量","评分","添加","编辑","保存","取消",
+            "提交","确认","返回","关闭","退出","登录","注册",
+            "优惠","红包","满减","配送","自提","评价","已售","月售",
+            "起送","距离","分钟","公里","去支付","立即","加入",
+            "退款","售后","满意","不满意","味道","包装","新鲜"];
+
+        var candidates = [];
+        var seen = {};
+        texts.sort(function(a, b) { return a.y - b.y; }).forEach(function(t) {
+            var text = t.text;
+            if (!text || text.length > 2000 || seen[text]) return;
+            var isNoise = false;
+            for (var i = 0; i < noise.length; i++) {
+                if (text === noise[i] || text === "全部") { isNoise = true; break; }
+            }
+            if (isNoise) return;
+            var cn = 0;
+            for (var j = 0; j < text.length; j++) {
+                var c = text.charCodeAt(j);
+                if (c >= 0x4e00 && c <= 0x9fff) cn++;
+            }
+            if (cn < 4) return;
+            seen[text] = true;
+            candidates.push(text);
+        });
+
+        if (candidates.length === 0) {
+            toast("⚠️ 未识别到评论文字\n请确保在评论区页面");
+            return;
         }
+
+        toast("📊 识别到 " + candidates.length + " 条文本，分析中...");
+
+        // 逐条调用API
+        var processed = 0, fakeCount = 0, realCount = 0;
+        var batchSize = Math.min(candidates.length, 15);
+
+        for (var i = 0; i < batchSize; i++) {
+            try {
+                var resp = http.postJson(API_URL, {
+                    text: candidates[i],
+                    user_token: TOKEN
+                });
+                if (resp.statusCode == 200) {
+                    var data = resp.body.json();
+                    processed++;
+                    if (data.is_fake) fakeCount++; else realCount++;
+                    console.log((data.is_fake ? "🔴":"🟢") + " " + candidates[i].slice(0, 30));
+                }
+            } catch (e) {
+                processed++;
+            }
+            sleep(500);
+        }
+
+        var resultText = "📊 分析 " + processed + " 条\n" +
+            "🔴 可疑: " + fakeCount + " 条\n" +
+            "🟢 可信: " + realCount + " 条\n" +
+            "📸 共识别: " + candidates.length + " 条";
+        showResult(resultText, fakeCount > realCount ? "#dc2626" : "#16a34a");
+
     } catch (e) {
-        showResult("📡 离线模式\n无法连接云端分析", "#f97316");
+        toast("⚠️ 错误: " + e.message);
     }
 }
 
+// ====================== 结果显示 ======================
 function showResult(text, color) {
     if (resultWindow) resultWindow.close();
     resultWindow = floaty.rawWindow(
@@ -107,37 +127,37 @@ function showResult(text, color) {
     });
     setTimeout(function() {
         if (resultWindow) { resultWindow.close(); resultWindow = null; }
-    }, 5000);
+    }, 6000);
 }
 
 // ====================== 浮动按钮 ======================
 var floatWin = floaty.rawWindow(
-    <frame gravity="right|center_vertical" margin="0 0 0 8">
+    <frame gravity="right|bottom" margin="0 0 120 16">
         <vertical>
             <button id="btnA" text="🔍"
                 style="width:64;height:64;borderRadius:32;
                 background:#f97316;color:#fff;fontSize:26;
-                elevation:12;border:none;marginBottom:16;"/>
+                elevation:12;border:none;marginBottom:16;padding:0;"/>
             <button id="btnB" text="📋"
                 style="width:64;height:64;borderRadius:32;
                 background:#fff;color:#f97316;fontSize:26;
-                elevation:10;border:3px solid #f97316;"/>
+                elevation:10;border:3px solid #f97316;padding:0;"/>
         </vertical>
     </frame>
 );
 
 floatWin.btnA.click(function() {
-    showPanel();
+    toast("📸 正在截图分析...");
+    setTimeout(analyzeFromScreen, 300);
 });
 
 floatWin.btnB.click(function() {
-    toast("📋 请在店铺页使用\n或手动粘贴JSON到PWA设置导入");
+    toast("📋 请在店铺或菜单页点此按钮\n将尝试OCR识别店名和菜品");
 });
 
 floatWin.setPosition(device.width - 84, device.height - 300);
 
+toast("🚀 就绪！打开评论区 → 点🔍");
 console.log("✅ 浮动按钮已显示");
-toast("🚀 助手就绪！\n复制评论 → 点🔍 → 自动分析");
 
-// 保持运行
 setInterval(function() {}, 3000);
