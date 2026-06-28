@@ -115,13 +115,13 @@ var floatWin = floaty.rawWindow(
     <frame gravity="right|center_vertical" margin="0 0 0 8">
         <vertical>
             <button id="btnA" text="🔍"
-                style="width:52;height:52;borderRadius:26;
-                background:#f97316;color:#fff;fontSize:20;
-                elevation:10;border:none;marginBottom:10;"/>
+                style="width:64;height:64;borderRadius:32;
+                background:#f97316;color:#fff;fontSize:26;
+                elevation:12;border:none;marginBottom:16;"/>
             <button id="btnB" text="📋"
-                style="width:52;height:52;borderRadius:26;
-                background:#fff;color:#f97316;fontSize:20;
-                elevation:8;border:2px solid #f97316;"/>
+                style="width:64;height:64;borderRadius:32;
+                background:#fff;color:#f97316;fontSize:26;
+                elevation:10;border:3px solid #f97316;"/>
         </vertical>
     </frame>
 );
@@ -134,7 +134,7 @@ floatWin.btnB.click(function() {
     toast("📋 请在店铺页使用\n或手动粘贴JSON到PWA设置导入");
 });
 
-floatWin.setPosition(device.width - 72, device.height / 3);
+floatWin.setPosition(device.width - 84, device.height - 300);
 
 console.log("✅ 浮动按钮已显示");
 toast("🚀 助手就绪！\n复制评论 → 点🔍 → 自动分析");
