@@ -22,7 +22,7 @@ function analyzeFromScreen() {
         // 尝试内置 OCR 模块
         var results = [];
         try {
-            results = ocr.detect(img, { mode: "zh" });
+            results = ocr.detect(img);
         } catch (e) {
             img.recycle();
             toast("⚠️ OCR模块不可用\n需要安装PaddleOCR插件\nAutoJs6主页→插件中心→Paddle OCR");
